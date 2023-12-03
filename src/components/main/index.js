@@ -26,7 +26,7 @@ export default function MainPage({ setMap, map, contents, coordArray }) {
     useEffect(() => {
         if (!!coordArray.length) {
             setLoacation({
-                name: coordArray[0].address.address_name,
+                name: "중앙위치",
                 coord: {
                     lat:
                         coordArray
@@ -41,21 +41,6 @@ export default function MainPage({ setMap, map, contents, coordArray }) {
                 },
             });
             setViewMarker(true);
-            setTimeout(() => {
-                let geocoder = new kakao.maps.services.Geocoder();
-
-                let coord = new kakao.maps.LatLng(location.lat, location.lng);
-                let callback = function (result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        console.log(result);
-                    }
-                };
-                geocoder.coord2Address(
-                    coord.getLng(),
-                    coord.getLat(),
-                    callback
-                );
-            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coordArray]);
@@ -64,7 +49,7 @@ export default function MainPage({ setMap, map, contents, coordArray }) {
         navigator.geolocation.getCurrentPosition((response) => {
             const { latitude, longitude } = response.coords;
             setLoacation({
-                name: "",
+                name: "중앙위치",
                 coord: { lat: latitude, lng: longitude },
             });
         }); // 성공시 successHandler, 실패시 errorHandler 함수가 실행된다.
@@ -117,17 +102,9 @@ export default function MainPage({ setMap, map, contents, coordArray }) {
                         >
                             {openInfo === marker.id && (
                                 <TextBox>
-                                    <div
-                                        style={{
-                                            width: "100%",
-                                            overflow: "hidden",
-                                            whiteSpace: "nowrap",
-                                            textOverflow: "ellipsis",
-                                            wordBreak: "break-all",
-                                        }}
-                                    >
+                                    <AddressText>
                                         {marker.place_name}
-                                    </div>
+                                    </AddressText>
                                     <LinkBox>
                                         <div
                                             style={{ cursor: "pointer" }}
@@ -201,17 +178,7 @@ export default function MainPage({ setMap, map, contents, coordArray }) {
                 >
                     {openInfo === "Here" && (
                         <TextBox>
-                            <div
-                                style={{
-                                    width: "100%",
-                                    overflow: "hidden",
-                                    whiteSpace: "nowrap",
-                                    textOverflow: "ellipsis",
-                                    wordBreak: "break-all",
-                                }}
-                            >
-                                {location.name}
-                            </div>
+                            <AddressText>{location.name}</AddressText>
                             <LinkBox>
                                 <div
                                     style={{ cursor: "pointer" }}
@@ -261,4 +228,14 @@ const LinkBox = styled.div`
     font-weight: 400;
     color: #3d75cc;
     display: flex;
+`;
+
+const AddressText = styled.div`
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    display: flex;
+    justify-content: center;
 `;
