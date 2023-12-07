@@ -5,18 +5,19 @@ import styled from "styled-components";
 import { getPlaceMarkerImg, randomMarkerImg } from "../../utils/getMarkerImg";
 import { shareKakao } from "../../utils/shareKakao";
 
-export default function MainPage({ setMap, map, contents, coordArray }) {
+export default function MainPage({
+    setMap,
+    map,
+    contents,
+    coordArray,
+    location,
+    setLoacation,
+    markers,
+    setMarkers,
+}) {
     const { kakao } = window;
     const [openInfo, setOpenInfo] = useState(0);
     const [viewMarker, setViewMarker] = useState(false);
-    const [markers, setMarkers] = useState([]);
-    const [location, setLoacation] = useState({
-        name: "",
-        coord: {
-            lat: 0,
-            lng: 0,
-        },
-    }); // 현재 위치를 저장할 상태
 
     useEffect(() => {
         successHandler(location.coord); // 성공시 successHandler, 실패시 errorHandler 함수가 실행된다.

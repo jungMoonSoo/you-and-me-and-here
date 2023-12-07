@@ -1,21 +1,43 @@
 import styled from "styled-components";
 import { ReactComponent as Back } from "../../assets/svg/Back.svg";
 import OrangeMarker from "../../assets/svg/personMarker/OrangeMarker.svg";
+import List from "../../assets/svg/List.svg";
+import Search from "../../assets/svg/Search.svg";
 import { useState } from "react";
 import Finder from "../finder";
+import SearchList from "../searchList";
 
 export default function NavigationBar({
     setCoordArray,
     coordArray,
     contents,
     setContents,
+    markers,
+    location,
 }) {
     const [open, setOpen] = useState(false);
+    const [sideBar, setSideBar] = useState("검색");
     return (
         <Container>
             <NavigationWrapper>
                 <img src={OrangeMarker} alt="" />
-                <div></div>
+                <Divider />
+                <img
+                    src={Search}
+                    alt=""
+                    width={35}
+                    onClick={() => setSideBar("검색")}
+                    style={{ margin: "20px 0 30px -5px", cursor: "pointer" }}
+                />
+                {!!markers.length && (
+                    <img
+                        src={List}
+                        alt=""
+                        width={50}
+                        onClick={() => setSideBar("검색된 결과")}
+                        style={{ cursor: "pointer" }}
+                    />
+                )}
             </NavigationWrapper>
             <PageWrapper
                 style={{
@@ -23,12 +45,16 @@ export default function NavigationBar({
                     transition: "0.65s",
                 }}
             >
-                <Finder
-                    contents={contents}
-                    setContents={setContents}
-                    coordArray={coordArray}
-                    setCoordArray={setCoordArray}
-                />
+                {sideBar === "검색" ? (
+                    <Finder
+                        contents={contents}
+                        setContents={setContents}
+                        coordArray={coordArray}
+                        setCoordArray={setCoordArray}
+                    />
+                ) : (
+                    <SearchList markers={markers} location={location} />
+                )}
                 <CloseBtn
                     onClick={() => {
                         setOpen((prev) => !prev);
@@ -86,4 +112,11 @@ const CloseBtn = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+`;
+
+const Divider = styled.div`
+    width: 100%;
+    height: 4px;
+    margin: 20px 0;
+    background-color: #f0e4d7;
 `;
